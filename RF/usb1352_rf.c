@@ -154,7 +154,7 @@ void usb1352_rf_thread(void* pArg)
                 Semaphore_pend(my_dev->spi_tx_sema_handle, BIOS_WAIT_FOREVER);
                 queue_remove(my_dev->rf_data_tx_queue);
                 Semaphore_post(my_dev->spi_tx_sema_handle);
-                Task_sleep(Clock_convertMsToTicks(10));
+                Task_sleep(Clock_convertMsToTicks(100));
             }
         }
     }
