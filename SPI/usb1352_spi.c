@@ -100,6 +100,8 @@ void usb1352_spi_thread(void* pArg)
         {
             if (transfer_flag == 1)
             {
+                GPIO_toggle(GPIO_PIN_DEBUG2);
+
                 transfer_flag = 0;
                 Semaphore_pend(my_dev->spi_rx_sema_handle, BIOS_WAIT_FOREVER);
                 queue_remove(my_dev->rf_data_rx_queue);
@@ -113,12 +115,18 @@ void usb1352_spi_thread(void* pArg)
 
         if (rx_frame.sync1 == SPI_SYNC_BYTE1 && rx_frame.sync2 == SPI_SYNC_BYTE2)
         {
+            if (rx_frame.fc.frameType != SPI_DUMMY)
+            {
+                Event_post(my_dev->intr_event, usb1352_event_intr);
+            }
+
             if (rx_frame.fc.frameType == SPI_DATA_TRANSFER_REQ)
             {
                 if (rx_frame.fc.cmdType == SPI_DATA_CMD_COMMON)
                 {
                     if (rx_frame.fc.cmdSubType == SPI_DATA_CMD_COMMON_NORMAL)
                     {
+                        GPIO_toggle(GPIO_PIN_DEBUG);
                         Semaphore_pend(my_dev->spi_tx_sema_handle, BIOS_WAIT_FOREVER);
                         queue_insert(my_dev->rf_data_tx_queue, &rx_frame);
                         Semaphore_post(my_dev->spi_tx_sema_handle);

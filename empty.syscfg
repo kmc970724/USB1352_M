@@ -96,6 +96,8 @@ custom.prop8 = ["custom868"];
 var multi_stack_validate = scripting.addModule("/ti/easylink/multi_stack_validate", {}, false);
 // Name
 custom.radioConfigcustom868.$name = "ti_devices_radioconfig_settings_prop0";
+// Frequency (MHz) - Frequency.
+custom.radioConfigcustom868.carrierFrequency = 923.0000;
 // Name
 custom.radioConfigcustom868.codeExportConfig.$name = "ti_devices_radioconfig_code_export_param0";
 // Symbol Name Generation Method
